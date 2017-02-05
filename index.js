@@ -5,7 +5,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var nodeUrl = require('url');
 
-var SDKInjector = require('./sourceApp');
+var SDKHelper = require('./sourceApp');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -13,22 +13,28 @@ app.use('/', express.static(path.join(__dirname, '/')))
 
 
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname + "/home.html"));
+  res.sendFile(path.join(__dirname + "/app/home.html"));
 });
 
-app.get('*', function (req, res) {
-  res.redirect('/');
+app.get('/url', function (req, res){
+  SDKHelper.getList(function(list){
+    var result = {};
+    result.status = "OK";
+    result.list = list;
+    res.json(result);
+  })
 });
 
-app.post('/', function(req, res){
+app.post('/url', function(req, res){
 
     var inputUrl = req.body.url;
-    SDKInjector.inject(inputUrl, function(pageLink){
-        var html = "localhost:3000/" + pageLink;
-        //console.log(html);
-
-        res.send(html);
-        //res.send(html);
+    SDKHelper.inject(inputUrl, function(pageLink){
+        var url = pageLink;
+        var result = {};
+        result.status = "OK";
+        result.url = url;
+        console.log(result);
+        res.json(result);
     });
     
 });

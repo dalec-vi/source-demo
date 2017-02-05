@@ -1,0 +1,14 @@
+html, body{
+	height: 100%;
+}
+
+.row{
+	
+	padding: 5px;
+	margin: 10px;
+}
+
+.url-list{
+	max-height: 300px;
+	overflow-y: scroll; 
+}
